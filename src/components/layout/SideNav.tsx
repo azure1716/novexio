@@ -18,7 +18,7 @@ export default function SideNav() {
     <motion.aside 
       initial={{ opacity: 0, x: -50 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+      transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 } as any}
       className="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 border-r border-white/10 bg-surface-container-lowest flex flex-col py-6 z-40"
     >
       <div className="px-6 mb-8">
