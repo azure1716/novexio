@@ -1,10 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 
 export default function SideNav() {
   const [isScanning, setIsScanning] = useState(false);
+  const pathname = usePathname();
 
   const handleScan = () => {
     setIsScanning(true);
@@ -13,6 +17,14 @@ export default function SideNav() {
       setIsScanning(false);
     }, 3000);
   };
+
+  const navItems = [
+    { label: "PORTFOLIO MATRIX", href: "/products", icon: "grid_view" },
+    { label: "OOKUBB", href: "/products/ookubb", icon: "groups" },
+    { label: "LYNIQ", href: "/products/lyniq", icon: "route" },
+    { label: "QUIZZY", href: "/products/quizzy", icon: "sports_esports" },
+    { label: "STUDYSPACE", href: "/products/studyspace", icon: "auto_awesome" },
+  ];
 
   return (
     <motion.aside 
@@ -38,37 +50,30 @@ export default function SideNav() {
           {isScanning ? "SCANNING..." : "INITIATE SCAN"}
         </button>
       </div>
-      <nav className="flex-1">
-        <a className="bg-primary-container/10 text-primary border-r-2 border-primary p-3 flex items-center gap-4 group transition-all" href="#">
-          <span className="material-symbols-outlined text-[20px]">query_stats</span>
-          <span className="font-label-mono-bold text-sm">OOKUBB</span>
-        </a>
-        <a className="text-on-surface-variant p-3 flex items-center gap-4 opacity-50 hover:opacity-100 hover:bg-surface-variant/30 transition-all" href="#">
-          <span className="material-symbols-outlined text-[20px]">biotech</span>
-          <span className="font-label-mono-bold text-sm">KNOIX</span>
-        </a>
-        <a className="text-on-surface-variant p-3 flex items-center gap-4 opacity-50 hover:opacity-100 hover:bg-surface-variant/30 transition-all" href="#">
-          <span className="material-symbols-outlined text-[20px]">science</span>
-          <span className="font-label-mono-bold text-sm">STUDYSPACE</span>
-        </a>
-        <a className="text-on-surface-variant p-3 flex items-center gap-4 opacity-50 hover:opacity-100 hover:bg-surface-variant/30 transition-all" href="#">
-          <span className="material-symbols-outlined text-[20px]">terminal</span>
-          <span className="font-label-mono-bold text-sm">LINIQ</span>
-        </a>
-        <a className="text-on-surface-variant p-3 flex items-center gap-4 opacity-50 hover:opacity-100 hover:bg-surface-variant/30 transition-all" href="#">
-          <span className="material-symbols-outlined text-[20px]">visibility</span>
-          <span className="font-label-mono-bold text-sm">RUPEE LENS</span>
-        </a>
+      <nav className="flex-1 space-y-1">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href || (item.href !== "/products" && pathname?.startsWith(item.href));
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`p-3 flex items-center gap-4 transition-all ${
+                isActive
+                  ? "bg-primary-container/10 text-primary border-r-2 border-primary font-bold"
+                  : "text-on-surface-variant opacity-60 hover:opacity-100 hover:bg-surface-variant/30"
+              }`}
+            >
+              <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+              <span className="font-label-mono-bold text-xs tracking-wider uppercase">{item.label}</span>
+            </Link>
+          );
+        })}
       </nav>
       <div className="mt-auto border-t border-white/10 pt-4">
-        <a className="text-on-surface-variant p-3 flex items-center gap-4 opacity-50 hover:opacity-100" href="#">
-          <span className="material-symbols-outlined text-[20px]">settings_input_component</span>
-          <span className="font-label-mono-sm text-xs">Diagnostics</span>
-        </a>
-        <a className="text-on-surface-variant p-3 flex items-center gap-4 opacity-50 hover:opacity-100" href="#">
-          <span className="material-symbols-outlined text-[20px]">code</span>
-          <span className="font-label-mono-sm text-xs">Terminal</span>
-        </a>
+        <Link className="text-on-surface-variant p-3 flex items-center gap-4 opacity-50 hover:opacity-100 transition-all" href="/">
+          <span className="material-symbols-outlined text-[20px]">home</span>
+          <span className="font-label-mono-sm text-xs">Home Command</span>
+        </Link>
       </div>
     </motion.aside>
   );
