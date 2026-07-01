@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Props {
@@ -13,15 +13,17 @@ interface Props {
 export default function ProductScreenshotGallery({ screenshots, productName, accentColor }: Props) {
   const [activeIdx, setActiveIdx] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [prevProductName, setPrevProductName] = useState(productName);
 
   // Default to Mobile Phone Frame mode only for LYNIQ and QUIZZY; STUDYSPACE defaults to Landscape (Desktop Matrix)
   const defaultIsPortrait = productName === "LYNIQ" || productName === "QUIZZY";
   const [isPortraitMode, setIsPortraitMode] = useState(defaultIsPortrait);
 
-  useEffect(() => {
+  if (productName !== prevProductName) {
+    setPrevProductName(productName);
     setIsPortraitMode(productName === "LYNIQ" || productName === "QUIZZY");
     setActiveIdx(0);
-  }, [productName]);
+  }
 
   if (!screenshots || screenshots.length === 0) return null;
 
@@ -132,7 +134,7 @@ export default function ProductScreenshotGallery({ screenshots, productName, acc
             >
               <div
                 onClick={() => setIsModalOpen(true)}
-                className="h-[440px] sm:h-[500px] lg:h-[530px] aspect-[9/18.5] bg-slate-950 border-2 rounded-[36px] sm:rounded-[40px] p-2 sm:p-2.5 flex flex-col justify-between relative group cursor-pointer shadow-2xl transition-all hover:scale-[1.01]"
+                className="h-[400px] sm:h-[500px] lg:h-[530px] aspect-[9/18.5] max-w-[85vw] sm:max-w-none bg-slate-950 border-2 rounded-[36px] sm:rounded-[40px] p-2 sm:p-2.5 flex flex-col justify-between relative group cursor-pointer shadow-2xl transition-all hover:scale-[1.01]"
                 style={{ borderColor: accentColor, boxShadow: `0 0 45px ${accentColor}45` }}
               >
                 {/* Glowing status badge */}

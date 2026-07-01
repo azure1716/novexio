@@ -25,7 +25,7 @@ export default function PortfolioMatrix() {
   };
 
   return (
-    <section className="p-10 overflow-hidden">
+    <section className="p-4 sm:p-6 md:p-10 overflow-hidden">
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -34,7 +34,7 @@ export default function PortfolioMatrix() {
         className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 border-b border-white/10 pb-4 gap-4"
       >
         <div>
-          <h3 className="font-headline-lg text-[48px] uppercase tracking-tight text-white">PORTFOLIO_MATRIX</h3>
+          <h3 className="font-headline-lg text-[32px] sm:text-[40px] md:text-[48px] uppercase tracking-tight text-white">PORTFOLIO_MATRIX</h3>
           <p className="font-label-mono-sm text-on-surface-variant opacity-60">
             ACTIVE_VENTURES_LISTING [N=4] {"//"} SOVEREIGN ARCHITECTURES
           </p>
@@ -54,7 +54,7 @@ export default function PortfolioMatrix() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className="grid grid-cols-1 md:grid-cols-12 gap-6 bg-white/5 border border-white/10"
+        className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 bg-white/5 border border-white/10"
       >
         {PRODUCTS.map((prod, idx) => {
           // Bento spanning: OOKUBB (8 col), QUIZZY (4 col), STUDYSPACE (7 col), LYNIQ (5 col)
@@ -63,7 +63,7 @@ export default function PortfolioMatrix() {
             <motion.div
               key={prod.id}
               variants={itemVariants}
-              className={`${span} bg-surface-container-low p-8 flex flex-col justify-between min-h-[420px] group border border-white/10 hover:border-white/40 transition-all relative overflow-hidden shadow-2xl`}
+              className={`${span} bg-surface-container-low p-5 sm:p-8 flex flex-col justify-between min-h-[380px] sm:min-h-[420px] group border border-white/10 hover:border-white/40 transition-all relative overflow-hidden shadow-2xl`}
             >
               {/* Subtle background glow */}
               <div
@@ -86,7 +86,7 @@ export default function PortfolioMatrix() {
                   <div className="w-14 h-14 bg-black/50 border border-white/15 p-1.5 flex items-center justify-center shrink-0">
                     <img src={prod.logo} alt={prod.name} className="max-w-full max-h-full object-contain" />
                   </div>
-                  <h4 className="font-headline-lg text-[40px] sm:text-[48px] leading-tight text-white tracking-tight group-hover:text-primary transition-colors">
+                  <h4 className="font-headline-lg text-[28px] sm:text-[40px] md:text-[48px] leading-tight text-white tracking-tight group-hover:text-primary transition-colors">
                     {prod.name}
                   </h4>
                 </div>
@@ -118,7 +118,7 @@ export default function PortfolioMatrix() {
 
                 <Link
                   href={`/products/${prod.id}`}
-                  className="px-6 py-2.5 bg-surface-container hover:bg-white text-white hover:text-black font-label-mono-bold text-xs uppercase tracking-wider border border-white/20 transition-all flex items-center gap-2 group-hover:border-white shadow-lg"
+                  className="w-full sm:w-auto justify-center sm:justify-start px-6 py-2.5 bg-surface-container hover:bg-white text-white hover:text-black font-label-mono-bold text-xs uppercase tracking-wider border border-white/20 transition-all flex items-center gap-2 group-hover:border-white shadow-lg"
                 >
                   <span>EXPLORE SPEC & DEMO</span>
                   <span>→</span>

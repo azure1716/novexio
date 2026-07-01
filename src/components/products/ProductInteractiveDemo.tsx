@@ -84,7 +84,7 @@ function OokubbGuildDemo({ accentColor }: { accentColor: string }) {
         <div className="col-span-12 sm:col-span-4 bg-surface-container-lowest border-r border-white/10 p-3 flex flex-col justify-between">
           <div>
             <div className="font-label-mono-bold text-[10px] text-on-surface-variant/60 mb-2 px-2 uppercase tracking-widest">
-              // ACTIVE GUILDS
+              {"// ACTIVE GUILDS"}
             </div>
             <div className="space-y-1">
               {[
@@ -835,7 +835,13 @@ function StudySpaceCanvasDemo({ accentColor }: { accentColor: string }) {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    const baseWidth = 580;
+    const drawScale = canvas.width < baseWidth ? Math.max(0.5, canvas.width / baseWidth) : 1;
+    const offsetYAdjust = drawScale !== 1 ? (canvas.height / drawScale - canvas.height) / 4 : 0;
+
     ctx.save();
+    ctx.scale(drawScale, drawScale);
+    ctx.translate(0, offsetYAdjust);
     ctx.translate(offset.x, offset.y);
 
     const itemsToDraw = currentPath ? [...history, currentPath] : history;
@@ -909,9 +915,12 @@ function StudySpaceCanvasDemo({ accentColor }: { accentColor: string }) {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
+    const baseWidth = 580;
+    const drawScale = canvas.width < baseWidth ? Math.max(0.5, canvas.width / baseWidth) : 1;
+    const offsetYAdjust = drawScale !== 1 ? (canvas.height / drawScale - canvas.height) / 4 : 0;
     return {
-      x: (e.clientX - rect.left) * scaleX - offset.x,
-      y: (e.clientY - rect.top) * scaleY - offset.y,
+      x: ((e.clientX - rect.left) * scaleX) / drawScale - offset.x,
+      y: ((e.clientY - rect.top) * scaleY) / drawScale - offsetYAdjust - offset.y,
     };
   };
 
@@ -919,7 +928,12 @@ function StudySpaceCanvasDemo({ accentColor }: { accentColor: string }) {
     e.preventDefault();
     if (tool === "pan" || e.button === 1 || e.button === 2 || e.shiftKey || e.altKey) {
       setIsPanning(true);
-      setPanStart({ x: e.clientX - offset.x, y: e.clientY - offset.y });
+      const canvas = canvasRef.current;
+      const baseWidth = 580;
+      const drawScale = canvas && canvas.width < baseWidth ? Math.max(0.5, canvas.width / baseWidth) : 1;
+      const offsetYAdjust = canvas && drawScale !== 1 ? (canvas.height / drawScale - canvas.height) / 4 : 0;
+      const rect = canvas ? canvas.getBoundingClientRect() : { left: 0, top: 0 };
+      setPanStart({ x: ((e.clientX - rect.left) / drawScale) - offsetYAdjust - offset.x, y: ((e.clientY - rect.top) / drawScale) - offsetYAdjust - offset.y });
       return;
     }
     setIsDrawing(true);
@@ -937,7 +951,13 @@ function StudySpaceCanvasDemo({ accentColor }: { accentColor: string }) {
 
   const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
     if (isPanning) {
-      setOffset({ x: e.clientX - panStart.x, y: e.clientY - panStart.y });
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const baseWidth = 580;
+      const drawScale = canvas.width < baseWidth ? Math.max(0.5, canvas.width / baseWidth) : 1;
+      const offsetYAdjust = drawScale !== 1 ? (canvas.height / drawScale - canvas.height) / 4 : 0;
+      const rect = canvas.getBoundingClientRect();
+      setOffset({ x: ((e.clientX - rect.left) / drawScale) - offsetYAdjust - panStart.x, y: ((e.clientY - rect.top) / drawScale) - offsetYAdjust - panStart.y });
       return;
     }
     if (!isDrawing || !currentPath) return;
@@ -982,68 +1002,68 @@ function StudySpaceCanvasDemo({ accentColor }: { accentColor: string }) {
       </div>
 
       {/* Drawing Toolbar (Tools, Colors, Actions) */}
-      <div className="bg-surface-container p-3 rounded-xl border border-white/15 flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-3 shadow-inner">
+      <div className="bg-surface-container p-2.5 sm:p-3 rounded-xl border border-white/15 flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-3 shadow-inner">
         {/* Tool Selectors */}
-        <div className="flex flex-wrap items-center gap-1.5 pb-1 xl:pb-0">
+        <div className="grid grid-cols-4 sm:flex sm:flex-wrap items-center gap-1 sm:gap-1.5 pb-1 xl:pb-0">
           {toolsList.map((t) => (
             <button
               key={t.id}
               onClick={() => setTool(t.id)}
-              className={`px-3 py-1.5 rounded-lg font-label-mono-bold text-xs uppercase transition-all flex items-center gap-1.5 shrink-0 ${
+              className={`px-2 py-2 sm:px-3 sm:py-1.5 rounded-lg font-label-mono-bold text-[10px] sm:text-xs uppercase transition-all flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 shrink-0 ${
                 tool === t.id
                   ? "bg-white text-black font-bold shadow-[0_0_15px_rgba(255,255,255,0.4)] scale-105 z-10"
                   : "bg-black/40 text-on-surface-variant/70 hover:text-white hover:bg-white/10 border border-white/5"
               }`}
             >
-              <span className="material-symbols-outlined text-[16px]">{t.icon}</span>
-              <span className="hidden md:inline">{t.label}</span>
+              <span className="material-symbols-outlined text-[18px] sm:text-[16px]">{t.icon}</span>
+              <span className="text-[9px] sm:text-xs">{t.label}</span>
             </button>
           ))}
         </div>
 
         {/* Color Palette & Canvas Controls */}
-        <div className="flex flex-wrap items-center justify-between xl:justify-end gap-3 pt-2 xl:pt-0 border-t border-white/10 xl:border-t-0">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center justify-between xl:justify-end gap-2.5 sm:gap-3 pt-2 xl:pt-0 border-t border-white/10 xl:border-t-0">
           {/* Color Swatches (disabled when Eraser or Pan is selected) */}
-          <div className={`flex items-center gap-1.5 bg-black/40 px-2.5 py-1.5 rounded-lg border border-white/10 ${tool === "eraser" || tool === "pan" ? "opacity-30 pointer-events-none" : ""}`}>
+          <div className={`flex items-center justify-between sm:justify-start gap-1 sm:gap-1.5 bg-black/40 px-2.5 py-2 sm:py-1.5 rounded-lg border border-white/10 ${tool === "eraser" || tool === "pan" ? "opacity-30 pointer-events-none" : ""}`}>
             {colorsList.map((c) => (
               <button
                 key={c.hex}
                 onClick={() => setColor(c.hex)}
                 title={c.name}
-                className={`w-5 h-5 rounded-full transition-transform ${color === c.hex ? "scale-125 ring-2 ring-white shadow-[0_0_10px_rgba(255,255,255,0.8)] z-10" : "opacity-70 hover:opacity-100 hover:scale-110"}`}
+                className={`w-6 h-6 sm:w-5 sm:h-5 rounded-full transition-transform ${color === c.hex ? "scale-125 ring-2 ring-white shadow-[0_0_10px_rgba(255,255,255,0.8)] z-10" : "opacity-70 hover:opacity-100 hover:scale-110"}`}
                 style={{ backgroundColor: c.hex }}
               />
             ))}
           </div>
 
           {/* Recenter, Undo & Clear Buttons */}
-          <div className="flex items-center gap-1.5">
+          <div className="grid grid-cols-3 sm:flex items-center gap-1.5">
             <button
               onClick={() => setOffset({ x: 0, y: 0 })}
               disabled={offset.x === 0 && offset.y === 0}
               title="Reset View / Recenter Canvas"
-              className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-label-mono-bold text-xs transition-all border border-white/10 flex items-center gap-1"
+              className="w-full sm:w-auto justify-center px-2.5 py-2 sm:px-3 sm:py-1.5 rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-label-mono-bold text-[10px] sm:text-xs transition-all border border-white/10 flex items-center gap-1"
             >
               <span className="material-symbols-outlined text-[16px]">my_location</span>
-              <span className="hidden sm:inline">RECENTER</span>
+              <span>RESET</span>
             </button>
             <button
               onClick={() => setHistory((prev) => prev.slice(0, prev.length - 1))}
               disabled={history.length === 0}
               title="Undo Last Stroke"
-              className="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-label-mono-bold text-xs transition-all border border-white/10 flex items-center gap-1"
+              className="w-full sm:w-auto justify-center px-2.5 py-2 sm:px-3 sm:py-1.5 rounded-lg bg-white/10 hover:bg-white/20 disabled:opacity-30 text-white font-label-mono-bold text-[10px] sm:text-xs transition-all border border-white/10 flex items-center gap-1"
             >
               <span className="material-symbols-outlined text-[16px]">undo</span>
-              <span className="hidden sm:inline">UNDO</span>
+              <span>UNDO</span>
             </button>
             <button
               onClick={() => setHistory([])}
               disabled={history.length === 0}
               title="Clear Drawing Board"
-              className="px-3 py-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 disabled:opacity-30 text-red-300 font-label-mono-bold text-xs transition-all border border-red-500/30 flex items-center gap-1"
+              className="w-full sm:w-auto justify-center px-2.5 py-2 sm:px-3 sm:py-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 disabled:opacity-30 text-red-300 font-label-mono-bold text-[10px] sm:text-xs transition-all border border-red-500/30 flex items-center gap-1"
             >
               <span className="material-symbols-outlined text-[16px]">delete</span>
-              <span className="hidden sm:inline">CLEAR</span>
+              <span>CLEAR</span>
             </button>
           </div>
         </div>
@@ -1052,18 +1072,18 @@ function StudySpaceCanvasDemo({ accentColor }: { accentColor: string }) {
       {/* Interactive Drawing Board Box */}
       <div
         onContextMenu={(e) => e.preventDefault()}
-        className="relative h-[420px] bg-surface-container-lowest border border-white/15 overflow-hidden grid-blueprint rounded-xl shadow-inner select-none"
+        className="relative h-[360px] sm:h-[420px] bg-surface-container-lowest border border-white/15 overflow-hidden grid-blueprint rounded-xl shadow-inner select-none"
         style={{
           backgroundPosition: `${offset.x}px ${offset.y}px`,
         }}
       >
         {/* Spatial Coordinates & Neural AI Status */}
-        <div className="absolute top-3 left-3 font-label-mono-sm text-[10px] text-white/30 pointer-events-none z-0">
-          COORDS: [{(-offset.x).toFixed(0)}, {(-offset.y).toFixed(0)}] {"//"} VECTOR MESH: {history.length} STROKES {"//"} MAKEVAS ENGINE
+        <div className="absolute top-3 left-3 right-3 sm:right-auto font-label-mono-sm text-[9px] sm:text-[10px] text-white/40 pointer-events-none z-0 max-w-[calc(100%-24px)] truncate">
+          COORDS: [{(-offset.x).toFixed(0)}, {(-offset.y).toFixed(0)}] {"//"} MESH: {history.length} STROKES <span className="hidden sm:inline">{"//"} MAKEVAS ENGINE</span>
         </div>
-        <div className="absolute bottom-3 right-3 font-label-mono-sm text-[10px] text-purple-400/70 pointer-events-none flex items-center gap-1.5 z-0 bg-black/60 px-2.5 py-1 rounded border border-purple-500/30 backdrop-blur-sm">
-          <span className="w-2 h-2 rounded-full bg-purple-400 animate-ping" />
-          <span>NEURAL CO-PILOT: VECTORIZING STROKES IN REAL-TIME</span>
+        <div className="absolute bottom-3 left-3 right-3 sm:left-auto sm:right-3 font-label-mono-sm text-[9px] sm:text-[10px] text-purple-300/90 pointer-events-none flex items-center justify-center sm:justify-start gap-1.5 z-0 bg-black/85 px-3 py-1.5 rounded-lg border border-purple-500/40 backdrop-blur-md max-w-[calc(100%-24px)] mx-auto shadow-xl">
+          <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-ping shrink-0" />
+          <span className="truncate">NEURAL CO-PILOT: <span className="hidden sm:inline">VECTORIZING STROKES IN REAL-TIME</span><span className="sm:hidden">ACTIVE</span></span>
         </div>
 
         {/* HTML5 Interactive Drawing Canvas Layer */}

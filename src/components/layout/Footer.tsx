@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="p-10 border-t border-white/10 bg-surface-container-lowest">
+    <footer className="p-6 sm:p-8 md:p-10 border-t border-white/10 bg-surface-container-lowest">
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-12 md:col-span-4">
           <h5 className="font-label-mono-bold text-primary mb-4">SYSTEM_MANIFESTO</h5>
@@ -24,9 +24,9 @@ export default function Footer() {
             <li><a className="hover:text-primary transition-colors" href="#">GRID_STABILITY</a></li>
           </ul>
         </div>
-        <div className="col-span-12 md:col-span-4 flex flex-col justify-end items-end">
+        <div className="col-span-12 md:col-span-4 flex flex-col justify-end items-start md:items-end mt-4 md:mt-0 text-left md:text-right">
           <div className="font-label-mono-sm text-[10px] text-primary opacity-40 mb-2">LAST_UPDATE: 2024.11.08_14:22:01</div>
-          <div className="text-right">
+          <div className="text-left md:text-right">
             <span className="font-headline-lg text-[24px] text-primary">NOVEXIO</span>
           </div>
         </div>

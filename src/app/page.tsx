@@ -10,7 +10,7 @@ export default function Home() {
       <TopNav />
       <div className="flex">
         <SideNav />
-        <main className="flex-1 ml-64 p-0">
+        <main className="flex-1 ml-0 lg:ml-64 p-0">
           <HeroSection />
           <PortfolioMatrix />
           <Footer />

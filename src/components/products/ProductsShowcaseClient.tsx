@@ -34,24 +34,24 @@ export default function ProductsShowcaseClient({ initialProductId }: Props) {
       <TopNav />
       <div className="flex min-h-screen">
         <SideNav />
-        <main className="flex-1 ml-64 p-0 bg-background min-h-[calc(100vh-64px)] flex flex-col justify-between">
+        <main className="flex-1 ml-0 lg:ml-64 p-0 bg-background min-h-[calc(100vh-64px)] flex flex-col justify-between">
           <div>
             {/* Top Header / Telemetry Bar */}
-            <div className="bg-surface-container-low border-b border-white/10 px-10 py-8 relative overflow-hidden grid-blueprint">
+            <div className="bg-surface-container-low border-b border-white/10 px-4 sm:px-6 md:px-10 py-6 md:py-8 relative overflow-hidden grid-blueprint">
               <div className="absolute top-0 right-0 w-96 h-full bg-gradient-to-l from-primary/5 to-transparent pointer-events-none" />
               
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
                 <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="w-2.5 h-2.5 bg-primary animate-pulse" />
-                    <span className="font-label-mono-bold text-xs text-primary uppercase tracking-widest">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3">
+                    <span className="w-2.5 h-2.5 bg-primary animate-pulse shrink-0" />
+                    <span className="font-label-mono-bold text-[10px] sm:text-xs text-primary uppercase tracking-wider sm:tracking-widest">
                       NOVEXIO {"//"} DIGITAL_FOUNDRY_VENTURES
                     </span>
                     <span className="bg-white/10 px-2 py-0.5 font-label-mono-sm text-[10px] text-on-surface-variant">
                       ACTIVE_VENTURES: 4
                     </span>
                   </div>
-                  <h1 className="font-headline-lg text-[48px] md:text-[64px] leading-none uppercase tracking-tight text-white">
+                  <h1 className="font-headline-lg text-[32px] sm:text-[48px] md:text-[64px] leading-none uppercase tracking-tight text-white">
                     {activeTab === "all" ? "PORTFOLIO_MATRIX" : activeProduct?.name || "VENTURE_SPEC"}
                   </h1>
                   <p className="font-label-mono-sm text-sm text-on-surface-variant/70 mt-2 max-w-2xl">
@@ -61,51 +61,16 @@ export default function ProductsShowcaseClient({ initialProductId }: Props) {
                   </p>
                 </div>
 
-                <div className="flex flex-col items-start md:items-end font-label-mono-bold text-xs space-y-1 bg-black/40 p-4 border border-white/10">
+                <div className="flex flex-col items-start md:items-end font-label-mono-bold text-xs space-y-1 bg-black/40 p-4 border border-white/10 w-full md:w-auto mt-4 md:mt-0">
                   <div className="text-tertiary">ESTIMATED PORTFOLIO VALUATION: 1.8B CR</div>
                   <div className="text-on-surface-variant/60">SYSTEM STATUS: ALL UNITS OPERATIONAL</div>
                   <div className="text-emerald-400">ZERO LATENCY CLOUD RELAY CONNECTED</div>
                 </div>
               </div>
-
-              {/* Venture Navigation Tabs */}
-              <div className="mt-8 pt-6 border-t border-white/10 flex flex-wrap gap-2">
-                <button
-                  onClick={() => handleTabChange("all")}
-                  className={`px-5 py-2.5 font-label-mono-bold text-xs uppercase transition-all flex items-center gap-2 border ${
-                    activeTab === "all"
-                      ? "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.4)]"
-                      : "bg-surface-container-highest/60 text-on-surface-variant/70 border-white/10 hover:bg-white/10 hover:text-white"
-                  }`}
-                >
-                  <span className="material-symbols-outlined text-[16px]">grid_view</span>
-                  <span>ALL_VENTURES [OVERVIEW]</span>
-                </button>
-
-                {PRODUCTS.map((prod) => (
-                  <button
-                    key={prod.id}
-                    onClick={() => handleTabChange(prod.id)}
-                    className={`px-5 py-2.5 font-label-mono-bold text-xs uppercase transition-all flex items-center gap-2 border ${
-                      activeTab === prod.id
-                        ? "text-black font-bold shadow-[0_0_20px_rgba(255,255,255,0.4)] scale-102 z-10"
-                        : "bg-surface-container-highest/60 text-on-surface-variant/70 border-white/10 hover:bg-white/10 hover:text-white"
-                    }`}
-                    style={
-                      activeTab === prod.id
-                        ? { backgroundColor: prod.accentColor, borderColor: prod.accentColor }
-                        : undefined
-                    }
-                  >
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: prod.accentColor }} />
-                    <span>{prod.code} {"//"} {prod.name}</span>
-                  </button>
-                ))}
-              </div>
             </div>
 
             {/* Main Display Area */}
-            <div className="p-10">
+            <div className="p-4 sm:p-6 md:p-10">
               <AnimatePresence mode="wait">
                 {activeTab === "all" ? (
                   <motion.div
@@ -117,14 +82,14 @@ export default function ProductsShowcaseClient({ initialProductId }: Props) {
                     className="space-y-12"
                   >
                     {/* Bento Grid Overview */}
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-8">
                       {PRODUCTS.map((prod, idx) => {
                         const isLarge = idx === 0 || idx === 3; // OOKUBB & STUDYSPACE get larger spans
                         return (
                           <motion.div
                             key={prod.id}
                             whileHover={{ y: -4 }}
-                            className={`col-span-1 md:${isLarge ? "col-span-7" : "col-span-5"} bg-surface-container-low border border-white/15 p-8 flex flex-col justify-between group relative overflow-hidden transition-all hover:border-white/40 shadow-xl`}
+                            className={`col-span-1 md:${isLarge ? "col-span-7" : "col-span-5"} bg-surface-container-low border border-white/15 p-5 sm:p-8 flex flex-col justify-between group relative overflow-hidden transition-all hover:border-white/40 shadow-xl`}
                           >
                             {/* Glow accent */}
                             <div
@@ -150,7 +115,7 @@ export default function ProductsShowcaseClient({ initialProductId }: Props) {
                                 </div>
                               </div>
 
-                              <h3 className="font-headline-lg text-[40px] md:text-[48px] text-white leading-tight mb-3 tracking-tight group-hover:text-primary transition-colors">
+                              <h3 className="font-headline-lg text-[28px] sm:text-[40px] md:text-[48px] text-white leading-tight mb-3 tracking-tight group-hover:text-primary transition-colors">
                                 {prod.name}
                               </h3>
 
@@ -205,7 +170,7 @@ export default function ProductsShowcaseClient({ initialProductId }: Props) {
                     className="space-y-12"
                   >
                     {/* Deep Dive Banner Section */}
-                    <div className="bg-surface-container-low border border-white/15 p-8 md:p-10 relative overflow-hidden shadow-2xl">
+                    <div className="bg-surface-container-low border border-white/15 p-5 sm:p-8 md:p-10 relative overflow-hidden shadow-2xl">
                       <div
                         className="absolute right-0 top-0 w-1/3 h-full blur-3xl pointer-events-none opacity-20"
                         style={{ backgroundColor: activeProduct.accentColor }}
@@ -228,12 +193,12 @@ export default function ProductsShowcaseClient({ initialProductId }: Props) {
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-6">
-                            <div className="w-20 h-20 sm:w-24 sm:h-24 bg-black/60 border border-white/20 p-2.5 flex items-center justify-center shrink-0 shadow-2xl">
+                          <div className="flex items-center gap-4 sm:gap-6">
+                            <div className="w-16 h-16 sm:w-24 sm:h-24 bg-black/60 border border-white/20 p-2 sm:p-2.5 flex items-center justify-center shrink-0 shadow-2xl">
                               <img src={activeProduct.logo} alt={activeProduct.name} className="max-w-full max-h-full object-contain" />
                             </div>
                             <div>
-                              <h2 className="font-headline-lg text-[48px] sm:text-[64px] leading-none text-white tracking-tight">
+                              <h2 className="font-headline-lg text-[32px] sm:text-[48px] md:text-[64px] leading-none text-white tracking-tight">
                                 {activeProduct.name}
                               </h2>
                               <div className="font-label-mono-sm text-xs text-on-surface-variant/60 mt-1 uppercase">
@@ -351,7 +316,7 @@ export default function ProductsShowcaseClient({ initialProductId }: Props) {
                     </div>
 
                     {/* Bottom Action / Deployment Toolbar */}
-                    <div className="bg-surface-container-lowest border border-white/15 p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+                    <div className="bg-surface-container-lowest border border-white/15 p-5 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
                       <div>
                         <div className="font-label-mono-bold text-sm text-white uppercase">
                           READY TO DEPLOY {activeProduct.name} IN YOUR WORKFLOW?
@@ -364,13 +329,13 @@ export default function ProductsShowcaseClient({ initialProductId }: Props) {
                       <div className="flex flex-wrap gap-4 w-full sm:w-auto">
                         <button
                           onClick={() => handleTabChange("all")}
-                          className="px-6 py-3 bg-surface-container hover:bg-white/10 border border-white/20 text-white font-label-mono-bold text-xs uppercase tracking-wider transition-all"
+                          className="w-full sm:w-auto justify-center px-6 py-3 bg-surface-container hover:bg-white/10 border border-white/20 text-white font-label-mono-bold text-xs uppercase tracking-wider transition-all flex items-center"
                         >
                           ← MATRIX OVERVIEW
                         </button>
                         <button
                           onClick={() => alert(`[NOVEXIO FOUNDRY] Initiating enterprise deployment sequence for ${activeProduct.name}... API key generated.`)}
-                          className="px-6 py-3 font-label-mono-bold text-xs uppercase tracking-wider text-black font-bold transition-all hover:opacity-90 shadow-xl"
+                          className="w-full sm:w-auto justify-center px-6 py-3 font-label-mono-bold text-xs uppercase tracking-wider text-black font-bold transition-all hover:opacity-90 shadow-xl flex items-center"
                           style={{ backgroundColor: activeProduct.accentColor }}
                         >
                           DEPLOY INSTANCE & API KEY
